@@ -21,6 +21,26 @@ def getWeather():
     result = obj.timezone_at(lng=location.longitude,lat=location.latitude)
     print(result)
 
+    home=pytz.timezone(result)
+    local_time=datetime.now(home)
+    current_time=local_time.strftime("%I:%M %p")
+    clock.config(text=current_time)
+    name.config(text="CURRENT WEATHER")
+
+    #weather
+    api="https://api.openweathermap.org/data/2.5/weather?q="+city+"&appid=43cae06a72b79475dd2b698e3748854d"
+
+    json_data = requests.get(api).json()
+    condition = json_data['weather'][0]['main']
+    description = json_data['weather'][0]['main']
+    temp = int(json_data['main']['temp']-273.15)
+    pressure = json_data['main']['pressure']
+    humidity = json_data['main']['humidity']
+    wind = json_data['wind']['speed']
+
+    t.config(text=(temp,"°"))
+    c.config(text=(condition,"|","FEELS","LIKE",temp,"°"))
+
 
 
 # Search box
@@ -45,6 +65,13 @@ logo.place(x=150,y=100)
 frame_image=PhotoImage(file="box.png")
 frame_myimage=Label(image=frame_image)
 frame_myimage.pack(padx=5,pady=5,side=BOTTOM)
+
+#time
+name=Label(root,font=("arial",15,"bold"))
+name.place(x=30,y=100)
+clock=Label(root,font=("Helvetica",20))
+clock.place(x=30,y=130)
+
 
 # label
 label1=Label(root,text="WIND",font=("Helvetica",15,'bold'),fg="white",bg="#1ab5ef")
