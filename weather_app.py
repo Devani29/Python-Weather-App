@@ -13,33 +13,42 @@ root.geometry("900x500+300+200")
 root.resizable(False,False)
 
 def getWeather():
-    city=textfield.get()
+    try:
+        city=textfield.get()
 
-    geolocator= Nominatim(user_agent="weather_app")
-    location= geolocator.geocode(city)
-    obj = TimezoneFinder()
-    result = obj.timezone_at(lng=location.longitude,lat=location.latitude)
-    print(result)
+        geolocator= Nominatim(user_agent="weather_app")
+        location= geolocator.geocode(city)
+        obj = TimezoneFinder()
+        result = obj.timezone_at(lng=location.longitude,lat=location.latitude)
+        print(result)
 
-    home=pytz.timezone(result)
-    local_time=datetime.now(home)
-    current_time=local_time.strftime("%I:%M %p")
-    clock.config(text=current_time)
-    name.config(text="CURRENT WEATHER")
+        home=pytz.timezone(result)
+        local_time=datetime.now(home)
+        current_time=local_time.strftime("%I:%M %p")
+        clock.config(text=current_time)
+        name.config(text="CURRENT WEATHER")
 
-    #weather
-    api="https://api.openweathermap.org/data/2.5/weather?q="+city+"&appid=43cae06a72b79475dd2b698e3748854d"
+        #weather
+        api="https://api.openweathermap.org/data/2.5/weather?q="+city+"&appid=43cae06a72b79475dd2b698e3748854d"
 
-    json_data = requests.get(api).json()
-    condition = json_data['weather'][0]['main']
-    description = json_data['weather'][0]['main']
-    temp = int(json_data['main']['temp']-273.15)
-    pressure = json_data['main']['pressure']
-    humidity = json_data['main']['humidity']
-    wind = json_data['wind']['speed']
+        json_data = requests.get(api).json()
+        condition = json_data['weather'][0]['main']
+        description = json_data['weather'][0]['main']
+        temp = int(json_data['main']['temp']-273.15)
+        pressure = json_data['main']['pressure']
+        humidity = json_data['main']['humidity']
+        wind = json_data['wind']['speed']
 
-    t.config(text=(temp,"°"))
-    c.config(text=(condition,"|","FEELS","LIKE",temp,"°"))
+        t.config(text=(temp,"°"))
+        c.config(text=(condition,"|","FEELS","LIKE",temp,"°"))
+
+        w.config(text=wind)
+        h.config(text=humidity)
+        d.config(text=description)
+        p.config(text=pressure)
+    
+    except Exception as e:
+        messagebox.showerror("Weather App","Invalid Entry!")
 
 
 
