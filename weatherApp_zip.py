@@ -120,6 +120,16 @@ def on_focus_out_humidity(event):
         h_dots.insert(0, "...")
         h_dots.config(fg="black")
 
+def on_focus_in_pressure(event):
+    if p_dots.get() == "...":
+        p_dots.delete(0,tk.END)
+        p_dots.config(fg="black")
+
+def on_focus_out_pressure(event):
+    if p_dots.get() == p:
+        p_dots.insert(0,"...")
+        p_dots.config(fg="black")
+
 
 
 # Search box
@@ -142,11 +152,11 @@ myimage3=Label(image=search_image2)
 myimage3.place(x=18,y=140)
 
 # Search icon
-search_icon1=Image.open("search_icon1.png")
-resized_icon=search_icon1.resize((40,40))
-search_icon1=ImageTk.PhotoImage(resized_icon)
-myicon=Label(image=search_icon1)
-myicon=Button(image=search_icon1,borderwidth=3,cursor="hand2",bg="#bbbbbb",command=weather_app)
+search_icon=Image.open("search_icon.png")
+resized_icon=search_icon.resize((40,40))
+search_icon=ImageTk.PhotoImage(resized_icon)
+myicon=Label(image=search_icon)
+myicon=Button(image=search_icon,borderwidth=3,cursor="hand2",bg="#bbbbbb",command=weather_app)
 myicon.place(x=130,y=200)
 
 # Logo
@@ -193,16 +203,19 @@ entry_zip_code.bind("<FocusOut>", on_focus_out_zip)
 
 # Focus in/out info
 w_dots=Label(root,text="...",font=("arial",18,"bold"),bg="#1ab5ef")
-w_dots.place(x=405,y=390)
+w_dots.place(x=411,y=390)
 w_dots.bind("<FocusIn>", on_focus_in_wind)
 w_dots.bind("<FocusOut>", on_focus_out_wind)
 
 h_dots=Label(root,text="...",font=("arial",18,"bold"),bg="#1ab5ef")
-h_dots.place(x=560,y=390)
+h_dots.place(x=565,y=390)
 h_dots.bind("<FocusIn>",on_focus_in_humidity)
 h_dots.bind("<FocusOut>",on_focus_out_humidity)
 
 p_dots=Label(root,text="...",font=("arial",18,"bold"),bg="#1ab5ef")
+p_dots.place(x=742,y=390)
+p_dots.bind("<FocusIn>",on_focus_in_pressure)
+p_dots.bind("<FocusOut>",on_focus_out_pressure)
 
 
 
@@ -231,7 +244,7 @@ w.place(x=380,y=390)
 h=Label(font=("arial",18,"bold"),bg="#1ab5ef")
 h.place(x=560,y=390)
 p=Label(font=("arial",18,"bold"),bg="#1ab5ef")
-p.place(x=700,y=390)
+p.place(x=705,y=390)
 
 
 
