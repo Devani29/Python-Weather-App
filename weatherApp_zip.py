@@ -41,9 +41,8 @@ def weather_app():
             local_time=datetime.now(home)
             current_time=local_time.strftime("%I:%M %p")
             clock.config(text=current_time)
-            # name.config(text="CURRENT WEATHER")
 
-            weather = data['weather'][0]['main']
+            # weather = data['weather'][0]['main']
             description = data['weather'][0]['description']
             temp = round(data['main']['temp'])
             temp_min = round(data['main']['temp_min'])
@@ -66,6 +65,8 @@ def weather_app():
             messagebox.showerror("Error", "Not city found!")
     except requests.exceptions.RequestException:
         messagebox.showerror("Error", "There's a problem with the API connection!")
+
+
 
 # User entry
 def on_focus_in_city(event):
@@ -151,6 +152,7 @@ search_image3=ImageTk.PhotoImage(resized_image)
 myimage3=Label(image=search_image2)
 myimage3.place(x=18,y=140)
 
+
 # Search icon
 search_icon=Image.open("search_icon.png")
 resized_icon=search_icon.resize((40,40))
@@ -159,10 +161,12 @@ myicon=Label(image=search_icon)
 myicon=Button(image=search_icon,borderwidth=3,cursor="hand2",bg="#bbbbbb",command=weather_app)
 myicon.place(x=130,y=200)
 
+
 # Logo
 logo_image=PhotoImage(file="logo.png")
 logo=Label(image=logo_image)
 logo.place(x=35,y=250)
+
 
 # Box
 box_info=Image.open("box.png")
@@ -171,12 +175,12 @@ box_info=ImageTk.PhotoImage(resized_box_info)
 mybox_info=Label(image=box_info)
 mybox_info.place(x=325,y=300)
 
-
 # Time
 name=Label(root, text="CURRENT WEATHER",font=("arial",15,"bold"))
 name.place(x=340,y=40)
 clock=Label(root,font=("Helvetica",20))
 clock.place(x=340,y=70)
+
 
 
 # Entries
@@ -201,6 +205,7 @@ entry_zip_code.place(x=35,y=162)
 entry_zip_code.bind("<FocusIn>", on_focus_in_zip)
 entry_zip_code.bind("<FocusOut>", on_focus_out_zip)
 
+
 # Focus in/out info
 w_dots=Label(root,text="...",font=("arial",18,"bold"),bg="#1ab5ef")
 w_dots.place(x=411,y=390)
@@ -216,7 +221,6 @@ p_dots=Label(root,text="...",font=("arial",18,"bold"),bg="#1ab5ef")
 p_dots.place(x=742,y=390)
 p_dots.bind("<FocusIn>",on_focus_in_pressure)
 p_dots.bind("<FocusOut>",on_focus_out_pressure)
-
 
 
 # Labels Info
@@ -238,16 +242,12 @@ tmax.place(x=560,y=200)
 d=Label(font=("arial",18,"bold"))
 d.place(x=410,y=250)
 
-
 w=Label(font=("arial",18,"bold"),bg="#1ab5ef")
 w.place(x=380,y=390)
 h=Label(font=("arial",18,"bold"),bg="#1ab5ef")
 h.place(x=560,y=390)
 p=Label(font=("arial",18,"bold"),bg="#1ab5ef")
 p.place(x=705,y=390)
-
-
-
 
 
 root.mainloop()
