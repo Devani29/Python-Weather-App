@@ -42,31 +42,58 @@ search_icon=Image.open("search_icon.png").resize((40,40))
 search_icon_tk=ImageTk.PhotoImage(search_icon)
 button=my_canvas.create_image(130,200, image=search_icon_tk, anchor="nw")
 
-shadow_img = Image.new("RGBA", (50, 50), (0, 0, 0, 100))  # Color negro con 100 de opacidad
-draw = ImageDraw.Draw(shadow_img)
-draw.rectangle([0, 0, 49, 49], outline=(0, 0, 0, 180), width=2)
-shadow_tk = ImageTk.PhotoImage(shadow_img)
+# Black shadows
+shadow_black_img = Image.new("RGBA", (50, 50), (0, 0, 0, 100))  # Color negro con 100 de opacidad
+draw_black = ImageDraw.Draw(shadow_black_img)
+draw_black.rectangle([0, 0, 49, 49], outline=(0, 0, 0, 180), width=2)
+shadow_black_tk = ImageTk.PhotoImage(shadow_black_img)
+
+# White shadow
+shadow_white_img = Image.new("RGBA", (50,50),(255,255,255,100))
+draw_white = ImageDraw.Draw(shadow_white_img)
+draw_white.rectangle([0,0,49,49], outline=(255,255,255,100), width=2)
+shadow_white_tk = ImageTk.PhotoImage(shadow_white_img)
+
+# Save references 
+root.shadow_black_tk = shadow_black_tk
+root.shadow_white_tk = shadow_white_tk
 
 # Variable para la sombra
-shadow = None  
+shadow_black = None
+shadow_white = None  
 
 # Función para mostrar sombra (con imagen)
 def on_enter(event):
-    global shadow
-    if shadow is None:
-        shadow = my_canvas.create_image(125, 196, image=shadow_tk, anchor="nw")
-        my_canvas.tag_lower(shadow, button)  # Mueve la sombra debajo del botón
+    global shadow_black
+    if shadow_black is None:
+        shadow_black = my_canvas.create_image(125, 196, image=shadow_black_tk, anchor="nw")
+        my_canvas.tag_lower(shadow_black, button)  # Mueve la sombra debajo del botón
 
 # Función para ocultar sombra
 def on_leave(event):
-    global shadow
-    if shadow:
-        my_canvas.delete(shadow)
-        shadow = None
+    global shadow_black
+    if shadow_black:
+        my_canvas.delete(shadow_black)
+        shadow_black = None
+
+def on_click(event):
+    global shadow_white
+    if shadow_white is None:
+        shadow_white = my_canvas.create_image(125,196,image=shadow_white_tk, anchor="nw")
+        my_canvas.tag_lower(shadow_white, button)
+
+def on_release(event):
+    global shadow_white
+    if shadow_white:
+        my_canvas.delete(shadow_white)
+        shadow_white = None
+
 
 # Enlazar eventos
 my_canvas.tag_bind(button, "<Enter>", on_enter)
 my_canvas.tag_bind(button, "<Leave>", on_leave)
+my_canvas.tag_bind(button, "<ButtonPress-1>", on_click)
+my_canvas.tag_bind(button, "<ButtonRelease-1>", on_release)
 
 # # Shadows
 # shadow_black_img = Image.new("RGBA",(50,50),(0,0,0,80))
