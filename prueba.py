@@ -30,7 +30,6 @@ def weather_app():
         data = response.json()
 
         if response.status_code == 200:
-
             geolocator=Nominatim(user_agent="weather_app")
             location=geolocator.geocode(city)
             obj=TimezoneFinder()
@@ -41,8 +40,8 @@ def weather_app():
             local_time=datetime.now(home)
             current_time=local_time.strftime("%I:%M %p")
             my_canvas.itemconfig(clock, text=current_time)
-          
 
+            city_name=data["name"]
             weather = data['weather'][0]['main']
             description = data['weather'][0]['description']
             temp = round(data['main']['temp'])
@@ -53,6 +52,8 @@ def weather_app():
             humidity = data['main']['humidity']
             wind = data['wind']['speed']
 
+            my_canvas.itemconfig(name_city, text=city_name)
+
 
             my_canvas.itemconfig(t, text=f"{temp}°")
             my_canvas.itemconfig(tmin, text=f"Minimum temperature {temp_min}°")
@@ -62,6 +63,7 @@ def weather_app():
             my_canvas.itemconfig(w, text=f"{wind}km/h")
             my_canvas.itemconfig(h, text=f"{humidity}%")
             my_canvas.itemconfig(p, text=f"{pressure}hPa")
+
             
 
         else:
@@ -149,6 +151,7 @@ my_canvas.create_image(0,0, image=weather_bg_tk, anchor="nw")
 # Time
 clock=my_canvas.create_text(390,70, text="00:00", font=("Helvetica",20))
 name=my_canvas.create_text(430,40, text="CURRENT WEATHER", font=("arial",15,"bold"))
+name_city=my_canvas.create_text(600, 100, text="", font=("arial", 18, "bold"))
 
 # Search box
 search_image=Image.open("search.png").resize((290,60))
