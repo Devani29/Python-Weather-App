@@ -17,21 +17,21 @@ root.iconbitmap('icono.ico')
 
 # Weather App
 def weather_app():
-    city=entry_city.get()
     country_code=entry_country_code.get()
     zip_code=entry_zip_code.get()
 
 
     api_key = '43cae06a72b79475dd2b698e3748854d'
-    url = f'http://api.openweathermap.org/data/2.5/weather?zip={zip_code},{country_code}&q={city}&appid={api_key}&units=metric&lang=en'
+    url = f'http://api.openweathermap.org/data/2.5/weather?zip={zip_code},{country_code}&appid={api_key}&units=metric&lang=en'
 
     try:
         response = requests.get(url)
         data = response.json()
 
         if response.status_code == 200:
+
             geolocator=Nominatim(user_agent="weather_app")
-            location=geolocator.geocode(city)
+            location=geolocator.geocode(zip_code)
             obj=TimezoneFinder()
             result=obj.timezone_at(lng=location.longitude,lat=location.latitude)
             print(result)
@@ -40,7 +40,7 @@ def weather_app():
             local_time=datetime.now(home)
             current_time=local_time.strftime("%I:%M %p")
             my_canvas.itemconfig(clock, text=current_time)
-
+          
             city_name=data["name"]
             weather = data['weather'][0]['main']
             description = data['weather'][0]['description']
@@ -54,7 +54,6 @@ def weather_app():
 
             my_canvas.itemconfig(name_city, text=city_name)
 
-
             my_canvas.itemconfig(t, text=f"{temp}°")
             my_canvas.itemconfig(tmin, text=f"Minimum temperature {temp_min}°")
             my_canvas.itemconfig(tmax, text=f"Maximum temperature {temp_max}°")
@@ -63,37 +62,16 @@ def weather_app():
             my_canvas.itemconfig(w, text=f"{wind}km/h")
             my_canvas.itemconfig(h, text=f"{humidity}%")
             my_canvas.itemconfig(p, text=f"{pressure}hPa")
-
             
 
         else:
             print(response.json())
-            messagebox.showerror("Error", "Not city found!")
+            messagebox.showerror("Error", "Zip Code Not Found!")
     except requests.exceptions.RequestException:
         messagebox.showerror("Error", "There's a problem with the API connection!")
 
 
 # User entry
-def on_focus_in_city(event):
-    if entry_city.get() == "City":
-        entry_city.delete(0, tk.END)
-        entry_city.config(fg="white")
-
-def on_focus_out_city(event):
-    if entry_city.get() == "":
-        entry_city.insert(0, "City")
-        entry_city.config(fg="gray")
-
-def on_focus_in_country(event):
-    if entry_country_code.get() == "Country Code (mx,us)":
-        entry_country_code.delete(0, tk.END)
-        entry_country_code.config(fg="white")
-
-def on_focus_out_country(event):
-    if entry_country_code.get() == "":
-        entry_country_code.insert(0, "Country Code (mx,us)")
-        entry_country_code.config(fg="gray")
-
 def on_focus_in_zip(event):
     if entry_zip_code.get() == "ZIP Code":
         entry_zip_code.delete(0, tk.END)
@@ -105,12 +83,23 @@ def on_focus_out_zip(event):
         entry_zip_code.config(fg="gray")
 
 
+def on_focus_in_country(event):
+    if entry_country_code.get() == "Country Code (mx,us)":
+        entry_country_code.delete(0, tk.END)
+        entry_country_code.config(fg="white")
+
+def on_focus_out_country(event):
+    if entry_country_code.get() == "":
+        entry_country_code.insert(0, "Country Code (mx,us)")
+        entry_country_code.config(fg="gray")
+
+
 
 # Show shadow
 def on_enter(event):
     global shadow_white
     if shadow_white is None:
-        shadow_white = my_canvas.create_image(133,196, image=shadow_white_tk, anchor="nw")
+        shadow_white = my_canvas.create_image(133,176, image=shadow_white_tk, anchor="nw")
         my_canvas.tag_lower(shadow_white, button)  
 
 # Hide shadow
@@ -123,7 +112,7 @@ def on_leave(event):
 def on_click(event):
     global shadow_black
     if shadow_black is None:
-        shadow_black = my_canvas.create_image(133,196, image=shadow_black_tk, anchor="nw")
+        shadow_black = my_canvas.create_image(133,176, image=shadow_black_tk, anchor="nw")
         my_canvas.tag_lower(shadow_black, button)
     print("click")
 
@@ -149,29 +138,24 @@ my_canvas.pack(fill="both", expand=True)
 my_canvas.create_image(0,0, image=weather_bg_tk, anchor="nw")
 
 # Time
-clock=my_canvas.create_text(390,70, text="00:00", font=("Helvetica",20))
-name=my_canvas.create_text(430,40, text="CURRENT WEATHER", font=("arial",15,"bold"))
-name_city=my_canvas.create_text(600, 100, text="", font=("arial", 18, "bold"))
+name=my_canvas.create_text(443,40, text="CURRENT WEATHER", font=("arial",15,"bold"))
+clock=my_canvas.create_text(400,70, text="00:00", font=("Helvetica",20))
+name_city=my_canvas.create_text(605, 100, text="", font=("arial", 18, "bold"))
 
 # Search box
-search_image=Image.open("search.png").resize((290,60))
-search_image_tk=ImageTk.PhotoImage(search_image)
-my_canvas.create_image(18,20, image=search_image_tk, anchor="nw")
-
 search_image2=Image.open("search.png").resize((290,60))
 search_image2_tk=ImageTk.PhotoImage(search_image2)
-my_canvas.create_image(18,80, image=search_image2_tk, anchor="nw")
+my_canvas.create_image(18,40, image=search_image2_tk, anchor="nw")
 
 search_image3=Image.open("search.png").resize((290,60))
 search_image3_tk=ImageTk.PhotoImage(search_image3)
-my_canvas.create_image(18,140, image=search_image3_tk, anchor="nw")
+my_canvas.create_image(18,100, image=search_image3_tk, anchor="nw")
 
 # Search icon
 search_icon=Image.open("search_icon.png").resize((40,40))
 search_icon_tk=ImageTk.PhotoImage(search_icon)
-
-my_canvas.create_image(138,200, image=search_icon_tk, anchor="nw")
-button=my_canvas.create_image(138,200, image=search_icon_tk, anchor="nw")
+my_canvas.create_image(138,180, image=search_icon_tk, anchor="nw")
+button=my_canvas.create_image(138,180, image=search_icon_tk, anchor="nw")
 
 # White shadow
 shadow_white_img = Image.new("RGBA", (50,50),(255,255,255,100))
@@ -207,27 +191,19 @@ logo_tk=ImageTk.PhotoImage(logo)
 my_canvas.create_image(35,250, image=logo_tk, anchor="nw")
 
 # Entries
-entry_city=tk.Entry(root, justify="center", width=21, font=("poppins",16,"bold"), bg="#23333d", border=0, fg="gray", highlightthickness=0, insertbackground="black")
-entry_city.insert(0, "City")
-entry_window=my_canvas.create_window(35,38, window=entry_city, anchor="nw")
-
-entry_city.bind("<FocusIn>", on_focus_in_city)
-entry_city.bind("<FocusOut>", on_focus_out_city)
-
-entry_country_code=tk.Entry(root, justify="center", width=21, font=("poppins",16,"bold"), bg="#202e3b", border=0, fg="gray", highlightthickness=0, insertbackground="black")
-entry_country_code.insert(0, "Country Code (mx,us)")
-entry_window2=my_canvas.create_window(35,98, window=entry_country_code, anchor="nw")
-
-entry_country_code.bind("<FocusIn>", on_focus_in_country)
-entry_country_code.bind("<FocusOut>", on_focus_out_country)
-
-entry_zip_code=tk.Entry(root, justify="center", width=21, font=("poppins",16,"bold"), bg="#1d2b37", border=0, fg="gray", highlightthickness=0, insertbackground="black")
+entry_zip_code=tk.Entry(root, justify="center", width=21, font=("poppins",16,"bold"), bg="#20313c", border=0, fg="gray", highlightthickness=0, insertbackground="black")
 entry_zip_code.insert(0, "ZIP Code")
-entry_window3=my_canvas.create_window(35,158, window=entry_zip_code, anchor="nw")
+entry_window3=my_canvas.create_window(35,58, window=entry_zip_code, anchor="nw")
 
 entry_zip_code.bind("<FocusIn>", on_focus_in_zip)
 entry_zip_code.bind("<FocusOut>", on_focus_out_zip)
 
+entry_country_code=tk.Entry(root, justify="center", width=21, font=("poppins",16,"bold"), bg="#1f2d3a", border=0, fg="gray", highlightthickness=0, insertbackground="black")
+entry_country_code.insert(0, "Country Code (mx,us)")
+entry_window2=my_canvas.create_window(35,118, window=entry_country_code, anchor="nw")
+
+entry_country_code.bind("<FocusIn>", on_focus_in_country)
+entry_country_code.bind("<FocusOut>", on_focus_out_country)
 
 # Labels Info
 label_wind=my_canvas.create_text(420, 345, text="WIND", font=("Helvetica",15,'bold'), fill="white")
