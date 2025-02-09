@@ -31,7 +31,7 @@ def weather_app():
         if response.status_code == 200:
 
             geolocator=Nominatim(user_agent="weather_app")
-            location=geolocator.geocode(city)
+            location=geolocator.geocode(zip_code)
             obj=TimezoneFinder()
             result=obj.timezone_at(lng=location.longitude,lat=location.latitude)
             print(result)
