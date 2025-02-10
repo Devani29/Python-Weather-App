@@ -7,6 +7,7 @@ from datetime import datetime
 import requests
 import pytz
 from PIL import Image, ImageTk, ImageDraw
+import os
 
 root=tk.Tk()
 root.title("Banana's Weather App")
@@ -15,14 +16,16 @@ root.resizable(False,False)
 root.iconbitmap('icono.ico')
 
 
+api_key = os.getenv("OPENWEATHER_API_KEY")
+if not api_key:
+    raise ValueError("API key not found! Please set the OPENWEATHER_API_KEY environment variable.")
+
 # Weather App
 def weather_app():
     city=entry_city.get()
     country_code=entry_country_code.get()
     zip_code=entry_zip_code.get()
 
-
-    api_key = '43cae06a72b79475dd2b698e3748854d'
     url = f'http://api.openweathermap.org/data/2.5/weather?zip={zip_code},{country_code}&q={city}&appid={api_key}&units=metric&lang=en'
 
     try:
