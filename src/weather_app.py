@@ -17,6 +17,7 @@ from focus_events import (on_focus_in_city, on_focus_out_city,
                           on_focus_in_zip, on_focus_out_zip)
 from focus_events import entry_fields
 from button_events import on_enter, on_leave, on_click, on_release, create_shadows
+from ui_elements import create_ui_elements
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 
@@ -90,51 +91,15 @@ def weather_app():
         messagebox.showerror("Error", "There's a problem with the API connection!")
 
 
-# User entry
-
-# Show shadow
-
-# Hide shadow
-
 # Define background
-weather_bg = Image.open("assets/images/bg_weather.jpg").resize((900, 500))
-weather_bg_tk = ImageTk.PhotoImage(weather_bg)
-
-# Create a canvas
-my_canvas = Canvas(root, width=900, height=500, highlightthickness=0)
-my_canvas.pack(fill="both", expand=True)
-
-# Set image in canvas
-my_canvas.create_image(0,0, image=weather_bg_tk, anchor="nw")
+# # Create a canvas
+# # Set image in canvas
+my_canvas, button = create_ui_elements(root)
 
 # Time
 clock=my_canvas.create_text(390,70, text="00:00", font=("Helvetica",20))
 name=my_canvas.create_text(430,40, text="CURRENT WEATHER", font=("arial",15,"bold"))
 name_city=my_canvas.create_text(600, 100, text="", font=("arial", 18, "bold"))
-
-# Search box
-search_image=Image.open("assets/images/search.png").resize((290,60))
-search_image_tk=ImageTk.PhotoImage(search_image)
-my_canvas.create_image(18,20, image=search_image_tk, anchor="nw")
-
-search_image2=Image.open("assets/images/search.png").resize((290,60))
-search_image2_tk=ImageTk.PhotoImage(search_image2)
-my_canvas.create_image(18,80, image=search_image2_tk, anchor="nw")
-
-search_image3=Image.open("assets/images/search.png").resize((290,60))
-search_image3_tk=ImageTk.PhotoImage(search_image3)
-my_canvas.create_image(18,140, image=search_image3_tk, anchor="nw")
-
-# Search icon
-search_icon=Image.open("assets/images/search_icon.png").resize((40,40))
-search_icon_tk=ImageTk.PhotoImage(search_icon)
-
-my_canvas.create_image(138,200, image=search_icon_tk, anchor="nw")
-button=my_canvas.create_image(138,200, image=search_icon_tk, anchor="nw")
-
-# White shadow
-
-# Black shadows
 
 # Save references 
 # Shadow variables
@@ -142,18 +107,6 @@ shadow_refs = create_shadows(root)
 root.shadow_white_tk = shadow_refs["shadow_white_tk"]
 root.shadow_black_tk = shadow_refs["shadow_black_tk"]
 
-# Box
-box_info=Image.open("assets/images/box.png").resize((550,180))
-box_info_data=box_info.getdata()
-new_data=[(r,g,b, int(a * 0.25)) for r,g,b, a in box_info_data]
-box_info.putdata(new_data)
-box_info_tk=ImageTk.PhotoImage(box_info)
-my_canvas.create_image(325,280, image=box_info_tk, anchor="nw")
-
-# Logo
-logo=Image.open("assets/images/logo.png")
-logo_tk=ImageTk.PhotoImage(logo)
-my_canvas.create_image(35,250, image=logo_tk, anchor="nw")
 
 # Entries
 entry_city, entry_country_code, entry_zip_code = entry_fields(root, my_canvas)
