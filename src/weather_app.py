@@ -12,12 +12,13 @@ from datetime import datetime
 from PIL import Image, ImageTk, ImageDraw
 from config.environment_variable import api_key
 from utils.log import logging_config
-from focus_events import (on_focus_in_city, on_focus_out_city,
+from modules.focus_events import (on_focus_in_city, on_focus_out_city,
                           on_focus_in_country, on_focus_out_country,
                           on_focus_in_zip, on_focus_out_zip)
-from focus_events import entry_fields
-from button_events import on_enter, on_leave, on_click, on_release, create_shadows
-from ui_elements import create_ui_elements
+from modules.focus_events import entry_fields
+from modules.button_events import on_enter, on_leave, on_click, on_release, create_shadows
+from modules.ui_elements import create_ui_elements
+from modules.labels_elements import create_labels
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 
@@ -91,43 +92,19 @@ def weather_app():
         messagebox.showerror("Error", "There's a problem with the API connection!")
 
 
-# Define background
-# # Create a canvas
 # # Set image in canvas
 my_canvas, button = create_ui_elements(root)
 
-# Time
-clock=my_canvas.create_text(390,70, text="00:00", font=("Helvetica",20))
-name=my_canvas.create_text(430,40, text="CURRENT WEATHER", font=("arial",15,"bold"))
-name_city=my_canvas.create_text(600, 100, text="", font=("arial", 18, "bold"))
-
 # Save references 
-# Shadow variables
 shadow_refs = create_shadows(root)
 root.shadow_white_tk = shadow_refs["shadow_white_tk"]
 root.shadow_black_tk = shadow_refs["shadow_black_tk"]
 
-
 # Entries
 entry_city, entry_country_code, entry_zip_code = entry_fields(root, my_canvas)
 
-# Labels Info
-label_wind=my_canvas.create_text(420, 345, text="WIND", font=("Helvetica",15,'bold'), fill="white")
-label_hum=my_canvas.create_text(580, 345, text="HUMIDITY", font=("Helvetica",15,'bold'), fill="white")
-label_pre=my_canvas.create_text(760, 345, text="PRESSURE", font=("Helvetica",15,'bold'), fill="white")
-
-
-t=my_canvas.create_text(470, 170, text="", font=("arial",70,"bold"), fill="#ec3d46")
-tmin=my_canvas.create_text(680, 154, text="", font=("arial",15,"bold"))
-tmax=my_canvas.create_text(682, 186, text="", font=("arial",15,"bold"))
-d=my_canvas.create_text(600, 250, text="", font=("arial",18,"bold"))
-
-
-# Labels 
-w=my_canvas.create_text(418, 395, text="---", font=("arial",18,"bold"))
-h=my_canvas.create_text(580, 395, text="---", font=("arial",18,"bold"))
-p=my_canvas.create_text(760, 395, text="---", font=("arial",18,"bold"))
-
+# # Labels Info
+clock, name, name_city, t, tmin, tmax, d, label_wind, label_hum, label_pre, w, h, p = create_labels(my_canvas)
 
 # Enlazar eventos
 my_canvas.tag_bind(button, "<Enter>", lambda event: on_enter(event, my_canvas, root.shadow_white_tk, button))
