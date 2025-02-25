@@ -1,16 +1,8 @@
 import tkinter as tk
-import requests
-import pytz
 import os
 import sys
 import logging
 from tkinter import *
-from geopy.geocoders import Nominatim
-from tkinter import ttk, messagebox
-from timezonefinder import TimezoneFinder
-from datetime import datetime
-from PIL import Image, ImageTk, ImageDraw
-from config.environment_variable import api_key
 from utils.log import logging_config
 from modules.focus_events import (on_focus_in_city, on_focus_out_city,
                           on_focus_in_country, on_focus_out_country,
@@ -19,6 +11,7 @@ from modules.focus_events import entry_fields
 from modules.button_events import on_enter, on_leave, on_click, on_release, create_shadows
 from modules.ui_elements import create_ui_elements
 from modules.labels_elements import create_labels
+from modules.weather_service import fetch_weather, extract_weather_data
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 
@@ -38,58 +31,19 @@ def weather_app():
     country_code=entry_country_code.get().strip()
     zip_code=entry_zip_code.get().strip()
 
-    
-    logger.info(f"Fetching weather data for {city}, {country_code}, {zip_code}...")
+    data = fetch_weather(city, country_code, zip_code)
+    weather_info = extract_weather_data(data)
 
-    if zip_code:
-        url = f'http://api.openweathermap.org/data/2.5/weather?zip={zip_code},{country_code}&appid={api_key}&units=metric&lang=en'
-    elif city:
-        url = f'http://api.openweathermap.org/data/2.5/weather?q={city},{country_code}&appid={api_key}&units=metric&lang=en'
-    else:
-        messagebox.showerror("Error", "Please enter a valid City or ZIP code.")
-
-    try:
-        response = requests.get(url)
-        data = response.json()
-
-        if response.status_code == 200:
-            lat = data["coord"]["lat"]
-            lon = data["coord"]["lon"]
-            obj=TimezoneFinder()
-            result=obj.timezone_at(lng=lon,lat=lat)
-
-            home=pytz.timezone(result)
-            local_time=datetime.now(home)
-            current_time=local_time.strftime("%I:%M %p")
-            my_canvas.itemconfig(clock, text=current_time)
-
-            city_name=data["name"]
-            description = data['weather'][0]['description']
-            temp = round(data['main']['temp'])
-            temp_min = round(data['main']['temp_min'])
-            temp_max = round(data['main']['temp_max'])
-            feels_like=round(data['main']['feels_like'])
-            pressure = data['main']['pressure']
-            humidity = data['main']['humidity']
-            wind = data['wind']['speed']
-
-            my_canvas.itemconfig(name_city, text=city_name)
-
-
-            my_canvas.itemconfig(t, text=f"{temp}°")
-            my_canvas.itemconfig(tmin, text=f"Minimum temperature {temp_min}°")
-            my_canvas.itemconfig(tmax, text=f"Maximum temperature {temp_max}°")
-            my_canvas.itemconfig(d, text=f"{description} | Feels like {feels_like}°")
-
-            my_canvas.itemconfig(w, text=f"{wind}km/h")
-            my_canvas.itemconfig(h, text=f"{humidity}%")
-            my_canvas.itemconfig(p, text=f"{pressure}hPa")
-        
-        else:
-            logger.info(response.json())
-            messagebox.showerror("Error", "City or ZIP code not found!")
-    except requests.exceptions.RequestException:
-        messagebox.showerror("Error", "There's a problem with the API connection!")
+    if weather_info:
+        my_canvas.itemconfig(clock, text=weather_info["local_time"])
+        my_canvas.itemconfig(name_city, text=weather_info["city_name"])
+        my_canvas.itemconfig(t, text=f"{weather_info['temp']}°")
+        my_canvas.itemconfig(tmin, text=f"Minimum temperature {weather_info['temp_min']}°")
+        my_canvas.itemconfig(tmax, text=f"Maximum temperature {weather_info['temp_max']}°")
+        my_canvas.itemconfig(d, text=f"{weather_info['description']} | Feels like {weather_info['feels_like']}°")
+        my_canvas.itemconfig(w, text=f"{weather_info['wind']}km/h")
+        my_canvas.itemconfig(h, text=f"{weather_info['humidity']}%")
+        my_canvas.itemconfig(p, text=f"{weather_info['pressure']}hPa")
 
 
 # # Set image in canvas
