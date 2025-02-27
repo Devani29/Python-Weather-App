@@ -9,6 +9,7 @@ from config.environment_variable import api_key
 
 logger = logging.getLogger(__name__)
 
+
 def fetch_weather(city, country_code, zip_code):
     """Fetch weather data from Openweather API."""
     logger.info(f"Fetching weather data for {city}, {country_code}, {zip_code}...")
