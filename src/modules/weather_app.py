@@ -20,7 +20,7 @@ def run_app():
     root.title("Banana's Weather App")
     root.geometry("900x500+300+200")
     root.resizable(False, False)
-    root.iconbitmap('assets/images/icono.ico')
+    root.iconbitmap('src/assets/images/icono.ico')
 
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
@@ -61,7 +61,7 @@ def run_app():
     # # Labels Info
     clock, name, name_city, t, tmin, tmax, d, label_wind, label_hum, label_pre, w, h, p = create_labels(my_canvas)
 
-    # Enlazar eventos
+    # Button events
     my_canvas.tag_bind(button, "<Enter>", lambda event: on_enter(event, my_canvas, root.shadow_white_tk, button))
     my_canvas.tag_bind(button, "<Leave>", lambda event: on_leave(event, my_canvas))
     my_canvas.tag_bind(button, "<ButtonPress-1>", lambda event: on_click(event, my_canvas, root.shadow_black_tk, button))
