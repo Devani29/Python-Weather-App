@@ -11,17 +11,12 @@ A simple weather application built with Python and Tkinter that fetches real-tim
 ## 🔧 Installation
 
 ### 1️⃣ Clone the Repository
-git clone https://github.com/Devani29/Python-Weather-App.git
-cd Python-WeatherApp
+![Clone Repository](assets/images/git-clone.png)
 
 ### 2️⃣ Install Dependencies
 Make sure you have Python 3 installed. Then, set up a virtual environment and install dependencies:
 
-py -m venv venv
-source venv/bin/activate                # On macOS/Linux
-venv\Scripts\activate                   # On Windows
-
-pip install -r requirements.txt
+![Install dependecies](assets/images/dependencies.png)
 
 ### 3️⃣ Run the Application
 py src/main.py
