@@ -11,38 +11,18 @@ A simple weather application built with Python and Tkinter that fetches real-tim
 ## 🔧 Installation
 
 ### 1️⃣ Clone the Repository
-![Clone Repository](assets/images/git-clone.png)
+![Clone Repository](src/assets/images/git-clone.png)
 
 ### 2️⃣ Install Dependencies
 Make sure you have Python 3 installed. Then, set up a virtual environment and install dependencies:
 
-![Install dependecies](assets/images/dependencies.png)
+![Install dependecies](src/assets/images/dependencies.png)
 
 ### 3️⃣ Run the Application
-py src/main.py
+![Run app](src/assets/images/run-main.png)
 
 ## 📝 Project Structure
-Python-WeatherApp/
-|── src/
-|   |── assets/
-|   |   |── images/                             # Icons and images
-|   |── config/
-        |── environment_variable.py
-|   |── data/
-        |── .gitignore
-        |── requirements.txt
-|   |── modules/
-        |── button_events.py                    # Button interactions
-        |── focus_events.py                     # Event handlers for text fields
-        |── labels_elements.py                  # Info labels
-        |── ui_elements.py                      # UI components
-        |── weather_app.py                      # Main application logic
-        |── weather_service.py                  # API integration
-|   |── utils/
-|   |     |── log/
-|   |         |── logging_config.py             # Logging configuration    
-|   |── main.py                                 # Entry point of the app
-|── README.md
+![Project structure](src/assets/images/project-structure.png)
 
 ## 🖥️ Technologies Used
 🔹Python 🐍
